@@ -12,7 +12,12 @@ builder.Services.AddDbContext<appdbContext>(options => options.UseNpgsql(builder
 var app = builder.Build();
 
 
-// Configure the HTTP request pipeline.
+using(var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<appdbContext>();
+    dbContext.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
