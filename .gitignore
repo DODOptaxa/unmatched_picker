@@ -5,3 +5,5 @@ riderModule.iml
 /_ReSharper.Caches/
 .env
 .appsettings.Development.json
+frontend/node_modules/
+node_modules/

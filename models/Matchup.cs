@@ -6,20 +6,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.models;
 
+[Keyless]
 [Table("matchups")]
-[Index("OpponentId", Name = "matchups_opponent_id_idx")]
-[Index("HeroId", "OpponentId", Name = "matchups_pair_uniq", IsUnique = true)]
+[Index("OpponentId", Name = "ix_matchups_opponent")]
 public partial class Matchup
 {
-    [Key]
-    [Column("id")]
-    public int Id { get; set; }
-
-    [Column("hero_id")]
-    public int HeroId { get; set; }
+    [Column("character_id")]
+    public int CharacterId { get; set; }
 
     [Column("opponent_id")]
     public int OpponentId { get; set; }
+
+    [Column("map_id")]
+    public int? MapId { get; set; }
+
+    [Column("scope")]
+    public string Scope { get; set; } = null!;
 
     [Column("games")]
     public int Games { get; set; }
@@ -27,15 +29,19 @@ public partial class Matchup
     [Column("wins")]
     public int Wins { get; set; }
 
-    [Column("win_rate")]
-    [Precision(5, 2)]
-    public decimal? WinRate { get; set; }
+    [Column("losses")]
+    public int Losses { get; set; }
 
-    [ForeignKey("HeroId")]
-    [InverseProperty("MatchupHeroes")]
-    public virtual Hero Hero { get; set; } = null!;
+    [Column("winrate")]
+    [Precision(5, 4)]
+    public decimal Winrate { get; set; }
+
+    [ForeignKey("CharacterId")]
+    public virtual Character Character { get; set; } = null!;
+
+    [ForeignKey("MapId")]
+    public virtual Map? Map { get; set; }
 
     [ForeignKey("OpponentId")]
-    [InverseProperty("MatchupOpponents")]
-    public virtual Hero Opponent { get; set; } = null!;
+    public virtual Character Opponent { get; set; } = null!;
 }
